@@ -1,16 +1,18 @@
-#Import
+# Import
 import random
 
-
-#Variables
+# Variables
 difficulty = 0
+day_count = 0
 wood = 100
-scrap = 100
+scrap = 10
 people = 5
 food = 10
 
 
-#Functions
+# lists and dictionary
+
+# Functions
 def menu():
     global difficulty
     print("This is a Base building game set in a zombie apocalypse")
@@ -20,11 +22,25 @@ def menu():
         game()
     if player_input == "2":
         quit()
+
+
 def game():
+    print("you start off with " + str(people) + " people " + str(wood) + " wood." + str(scrap) + "scrap and " + str(
+        people) + " people.")
+
+def day():
+    global day_count
+    day_count += 1
+    print("This is day " + int(day_count))
+    pass
+def generator():
     global wood, scrap, people, food
-    print("you start off with " + str(people) + " people." + str(wood) + " woods." + str(scrap) + "scrapes and " + str(people) + " people.")
+    print("Today you scavenged " + wood + "wood and " + scrap + "scrap and you found " + people)
 
 
 
-#Main
-Menu()
+
+# Main
+#menu()
+#generator()
+day()
