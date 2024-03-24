@@ -29,6 +29,14 @@ def menu():#The Menu Function that gets used in the beginning
 def game():
     print("you start off with " + str(people) + " people " + str(wood) + " wood." + str(scrap) + "scrap and " + str(
         people) + " people.")
+    while food >= 0 or people >= 0 or day_count >= 100:
+        pass
+
+    if food >= 0:
+        print("you starved")
+    elif people >= 0:
+        print("you have no more people left")
+
 
 
 def generator():
@@ -36,6 +44,7 @@ def generator():
     wood_found = 0
     scrap_found = 0
     people_found = 0
+
     print("With the tools you have today you scavenged " + wood_found + "wood and " + scrap_found + "scrap and you found " + people_found)
     print("Do you want to upgrade your tools for the next day? ")
 
