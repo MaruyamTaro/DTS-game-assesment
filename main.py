@@ -10,11 +10,12 @@ people = 5
 food = 10
 
 
+
 # lists and dictionary
 
 # Functions
-
-def menu():  # The Menu Function that gets used in the beginning
+# The Menu Function that gets used in the beginning
+def menu():
     global difficulty
     print(
         "This is a Base building game set in a zombie apocalypse!\nTo win you have to survive 100 days!\nUpgrade your gear to scavenge more materials and protect your base!")
@@ -41,8 +42,12 @@ def game():
     if food >= 0 and people >= 0 and day_count >= 100:
         print("You win! you survived for 100 days!")
 
-def upgrade():   #function for player to upgrade gear and Base with materials.
-    pass
+
+
+#function for player to upgrade gear and Base with materials.
+def upgrade():
+    print("you can upgrade your Gear and Base!")
+
 
 
 
