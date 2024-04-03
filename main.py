@@ -14,7 +14,7 @@ food = 10
 current_gear = 0
 
 
-ITEMS = []
+ITEMS = [{"Name": "worAk 47", }]
 INVENTORY = []
 
 
@@ -104,7 +104,7 @@ def generator():
 
 def day():
     global day_count,food
-    #calculates how much food per day
+    #calculates how much food per day is ate
     food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
     food -= people * food_per_day
     day_count += 1
