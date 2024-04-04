@@ -14,7 +14,7 @@ food = 10
 current_gear = 0
 
 
-ITEMS = [{"Name": "worAk 47", }]
+ITEMS = [{"Name": "worn Ak 47", }]
 INVENTORY = []
 
 
@@ -78,7 +78,15 @@ def game():
 #function for player to upgrade gear and Base with materials.
 def upgrade():
     print("you need materials to upgrade your Gear and Base")
+    try:
+        player_input = input("If you want to upgrade your Gear for better chances at scavenging press 1\n"
+                             "If you want to upgrade your base for higher chances of survival and defence press 2\n")
+        if player_input == "1":
 
+        if player_input == "2":
+
+    except ValueError:
+        print("Invalid input Try again")
 
 
 
@@ -142,5 +150,5 @@ def day():
 
 
 
-# Main
+#Main
 menu()
