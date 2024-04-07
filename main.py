@@ -77,34 +77,41 @@ def game():
 
 #function for player to upgrade gear and Base with materials.
 def upgrade():
-    print("you need materials to upgrade your Gear and Base")
     try:
         player_input = input("If you want to upgrade your Gear for better chances at scavenging press 1\n"
                              "If you want to upgrade your base for higher chances of survival and defence press 2\n")
         if player_input == "1":
-
+            gearupgrade()
         if player_input == "2":
+            baseupgrade()
 
     except ValueError:
         print("Invalid input Try again")
 
+def gearupgrade():
+    print("There are 4 levels of gear you can upgrade to")
+    # access the gear upgrades in the dictionary
+    gear_upgrades = UPGRADES[1]['GEAR_UPGRADES']
 
 
+def baseupgrade():
+    pass
 
 #player gaining materials after scavenging
+
 def generator():
     global wood, scrap, people, food
-    #this part finds out how much of each materials are getting found
+    #this part finds out how much of each material are getting found
     wood_found = random.randint(10, difficulty[0]["CHANCES"][0]["wood_rate"])
     scrap_found = random.randint(10, difficulty[0]["CHANCES"][0]["scrap_rate"])
     people_found = random.randint(0, difficulty[0]["CHANCES"][0]["people_rate"])
     people_dead = people-random.randint(0, difficulty[0]["CHANCES"][0]["people_death"])
     people = people-people_dead
     print("you scavenged for a few hours in a close city with leftover loot")
-    if people_dead >= 0:
+    if people_dead != 0:
         print("Unfortunately ", people_dead, " people died")
 
-    print("With the tools you have today, you scavenged " + str(wood_found) + " wood and " + str(scrap_found) + " scrap and you found " + str(people_found))
+    print("With the tools you have today, you scavenged " + str(wood_found) + " wood and " + str(scrap_found) + " scrap and you found and " + str(people_found) + " people")
     print("After a long day of scavenging you go home to rest and prepare for the next day.")
     input("Press Enter to continue...")
     day()
@@ -112,7 +119,7 @@ def generator():
 
 def day():
     global day_count,food
-    #calculates how much food per day is ate
+    #calculates how much food per day is eaten
     food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
     food -= people * food_per_day
     day_count += 1
@@ -123,6 +130,7 @@ def day():
         playerInput = int(input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\n"))
         if playerInput == 1:
             os.system('cls')
+            print("you need materials to upgrade your Gear and Base")
             generator()
 
         elif playerInput == 2:
