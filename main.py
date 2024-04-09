@@ -124,7 +124,6 @@ def generator():
     print("With the tools you have today, you scavenged " + str(wood_found) + " wood and " + str(scrap_found) + " scrap and you found " + str(people_found))
     print("After a long day of scavenging you go home to rest and prepare for the next day.")
     input("Press Enter to continue...")
-    day()
 
 
 def day():
@@ -135,6 +134,7 @@ def day():
     day_count += 1
     print("This is day ", int(day_count))
     print("Your team ate", str(food), "kilos of food today")
+    food = food - food
     print("you Have " + str(people) + " people, " + str(wood) + " wood, " + str(scrap) + " scrap, and " + str(food) + " food.")
     try:
         playerInput = int(input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\n"))
@@ -151,21 +151,31 @@ def day():
 
 
 
-    while food >= 0 or people >= 0 or day_count >= 100:
-        day()
-    if food <= 0:
-        print("Everyone starved. You lose")
-        input("Press Enter to continue...")
-
-    elif people <= 0:
-        print("you have no more people left. You lose")
-        input("Press Enter to continue...")
-
-    if food >= 0 and people >= 0 and day_count >= 100:
-        print("You win! you survived for 100 days!")
-        input("Press Enter to continue...")
-
-
-
 #Main
 menu()
+while food >= 0 or people >= 0 or day_count <= 50:
+    day()
+if food <= 0:
+    print("Everyone starved. You lose")
+    input("Press Enter to continue...")
+
+elif people <= 0:
+    print("you have no more people left. You lose")
+    input("Press Enter to continue...")
+
+if food >= 0 and people >= 0 and day_count >= 50:
+    print("You win! you survived for 100 days!")
+    input("Press Enter to continue...")
+
+try:
+    playerInput = int(input(
+        "Do you want to try again? press 1 to play again with  different difficulty or press 2 to quit\n"))
+    if playerInput == 1:
+        os.system('cls')
+        menu()
+    elif playerInput == 2:
+        os.system('cls')
+        quit()
+except ValueError:
+    print("Invalid input Try again")
+
