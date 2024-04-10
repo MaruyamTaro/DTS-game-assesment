@@ -3,13 +3,13 @@ import random
 import time
 import os
 
-# Variables
+# Variables hold different types information
 difficulty = 0
 day_count = 0
 
-wood = 100
-scrap = 100
-people = 5
+wood = 0
+scrap = 0
+people = 8
 food = 10
 
 current_gear = 1
@@ -17,60 +17,72 @@ current_base = 1
 current_gear_cost = 100
 current_base_cost = 100
 
+zombie_raid_level = 0
 
 ITEMS = [{"Name": "worn Ak 47","buff":20}]
 INVENTORY = []
 
 
-#lists and dictionary
-#This was the code for the upgrades but i thought that a
-#UPGRADES = [
-    #{"BASE_UPGRADES": [{"wall_1": 0.1, "wall_2": 0.3, "wall_1": 0.4, "wall_1": 0.5}]}
-    #, {"GEAR_UPGRADES": [{"Level 1 gear": 1.2, "Level 2 gear": 1.4, "Level 3 gear": 1.8, "Level 4 gear": 2}]}]
+#lists and dictionary holds information like varaiables but can be called and dictonaries are able to set names to different values
+
 #these are the values that will change depending on the difficulty
 EASY = [
-        {"CHANCES": [{"zombie": 0.1, "food_rate": 0.2, "wood_rate": 200, "scrap_rate": 200, "people_rate": 2, "people_death": 2}]}
+        {"CHANCES": [{"zombie": 10, "food_rate": 0.2, "wood_rate": 150, "scrap_rate": 150, "people_rate": 6, "food_find": 3, "people_death": 2}]}
        ]
 
 HARD = [
-        {"CHANCES": [{"zombie": 0.1, "food_rate": 0.25, "wood_rate": 150, "scrap_rate": 150, "people_rate": 3, "people_death": 3}]}
+        {"CHANCES": [{"zombie": 15, "food_rate": 0.25, "wood_rate": 100, "scrap_rate": 100, "people_rate": 5, "food_find": 2, "people_death": 3}]}
        ]
 
 UNFAIR = [
-        {"CHANCES": [{"zombie": 0.5, "food_rate": 0.4, "wood_rate": 100, "scrap_rate": 100, "people_rate": 5, "people_death": 5}]}
+        {"CHANCES": [{"zombie": 20, "food_rate": 0.4, "wood_rate": 75, "scrap_rate": 75, "people_rate": 5, "food_find": 1, "people_death": 3}]}
        ]
 
 
-# Functions
+# Functions allow chunks of code that can be called anytime, so you don't have to repeat code
 # The Menu Function that gets used in the beginning
 def menu():
-    global difficulty, EASY, HARD, UNFAIR
+    global difficulty, EASY, HARD, UNFAIR, wood, scrap, people, food, current_gear, current_base, current_gear_cost, current_base_cost, zombie_raid_level, day_count
+    difficulty = 0
+    day_count = 0
+
+    wood = 0
+    scrap = 0
+    people = 5
+    food = 10
+
+    current_gear = 1
+    current_base = 1
+    current_gear_cost = 100
+    current_base_cost = 100
+
+    zombie_raid_level = 0
+
     print(
         "This is a Base building game set in a zombie apocalypse!\nTo win you have to survive 100 days!\nUpgrade your gear to scavenge more materials and protect your base!")
-    player_input = input("What difficulty do you want to play! (1 for Easy) (2 for Hard) (3 for unfair)(p to restart)\n")
-
-    if player_input == "1":
-        difficulty = EASY
-
-    elif player_input == "2":
-        difficulty = HARD
-
-    elif player_input == "3":
-        difficulty = UNFAIR
-
-    elif player_input == "p":
-        menu()
-
+    #this code is used many times because this makes the code hard to break.
     try:
-        player_input = input("If you want to play, press 1. If you want to quit press 2\n")
+        player_input = input("What difficulty do you want to play! (1 for Easy) (2 for Hard) (3 for unfair)(4 to quit)(p to restart)\n")
+
         if player_input == "1":
-            os.system('cls')
-            game()
+            difficulty = EASY
+
         elif player_input == "2":
+            difficulty = HARD
+
+        elif player_input == "3":
+            difficulty = UNFAIR
+
+        elif player_input == "4":
             quit()
+
+        elif player_input == "p":
+            menu()
+        else:
+            print("Invalid")
     except ValueError:
         print("Invalid input Try again")
-
+    game()
 
 def game():
     print("You wander around with your team and finally found a place you can stay and make camp\nYou Can go scavenging for people, scrap, and wood. Per day your food will go down depending on the number of people\n"
@@ -91,38 +103,49 @@ def upgrade():
                              "If you want to upgrade your base for higher chances of survival and defence when zombies attack press 2\n(p to restart)\n")
         if player_input == "1":
             upgradegear()
+            return
         elif player_input == "2":
             upgradebase()
+            return
         elif player_input == "3":
             return
         elif player_input == "p":
             menu()
+        else:
+            print("Invalid")
 
     except ValueError:
         print("Invalid input Try again")
+
+
 def upgradegear():
     global wood, scrap, current_gear_cost, current_gear
-    cost = 0
     cost = current_gear_cost * 1.5
     print("It will take", cost, "scrap and wood to upgrade to the next level.")
-    if scrap and wood <= cost:
+    if scrap < cost or wood < cost:  # Changed from 'and' to 'or' because you need to check each resource individually
         input("you don't have enough to upgrade right now\n press enter to go scavenging instead")
         generator()
     else:
         while True:
             try:
-                player_input = int(input("Do you want to spend "), cost, " to upgrade your gear? press 1 for yes press 2 to go scavenging (p to restart)")
-                if player_input == 1:
+                player_input = input("Do you want to spend " + str(cost) + " to upgrade your gear? press 1 for yes press 2 to go scavenging (p to restart)")
+                if player_input == "1":
                     scrap -= cost
                     wood -= cost
                     current_gear = current_gear * 1.5
-                    input("Upgraded to next level\nenter to continue...")
+                    current_gear_cost = current_gear_cost * 1.5
+                    print("Upgraded to next level\n")
                     break
 
-                elif player_input == 2:
+                elif player_input == "2":
                     generator()
+                    break
+
                 elif player_input == "p":
                     menu()
+                    break
+                else:
+                    print("Invalid")
 
             except ValueError:
                 print("Invalid input Try again")
@@ -131,32 +154,39 @@ def upgradegear():
 
 def upgradebase():
     global wood, scrap, current_base, current_base_cost
-    cost = 0
     cost = current_base_cost * 1.5
     print("It will take", cost, "scrap and wood to upgrade to the next level.")
-    if scrap and wood <= cost:
+    if scrap < cost or wood < cost:  # Here also change 'and' to 'or'
         input("you don't have enough to upgrade right now\n press enter to go scavenging")
         generator()
     else:
         while True:
             try:
-                player_input = int(input("Do you want to spend "), cost, " to upgrade your base? press 1 for yes press 2 to go scavenging instead (p to restart)")
-                if player_input == 1:
+                player_input = input("Do you want to spend " + str(
+                    cost) + " to upgrade your base? press 1 for yes press 2 to go scavenging (p to restart)")
+                if player_input == "":
+                    continue
+
+                if player_input == "1":
                     scrap -= cost
                     wood -= cost
-                    current_base = current_base * 1.5
-                    input("Upgraded to next level\nenter to continue...")
+                    current_base *= 1.5
+                    current_base_cost *= 1.5
+                    print("Upgraded to next level\n")
                     break
 
-                elif player_input == 2:
+                elif player_input == "2":
                     generator()
+                    break
 
                 elif player_input == "p":
                     menu()
+                    break
+                else:
+                    print("Invalid input. Please try again.")
 
             except ValueError:
-                print("Invalid input Try again")
-
+                print("Invalid input. Please try again.")
 
 
 
@@ -169,12 +199,16 @@ def upgradebase():
 #player gaining materials after scavenging
 def generator():
     global wood, scrap, people, food
+
+    #used to test the generator
+    #print(int(difficulty[0]["CHANCES"][0]["wood_rate"]),int(difficulty[0]["CHANCES"][0]["scrap_rate"]),int(difficulty[0]["CHANCES"][0]["people_rate"]))
+
     #this part finds out how much of each materials are getting found
-    wood_found = random.randint(10, difficulty[0]["CHANCES"][0]["wood_rate"]) * current_gear
-    scrap_found = random.randint(10, difficulty[0]["CHANCES"][0]["scrap_rate"]) * current_gear
-    people_found = random.randint(0, difficulty[0]["CHANCES"][0]["people_rate"])
-    people_dead = people-random.randint(0, difficulty[0]["CHANCES"][0]["people_death"])
-    food_found = random.randint(0, people * difficulty[0]["CHANCES"][0]["food_rate"] + 0.5)
+    wood_found = random.randint(int(difficulty[0]["CHANCES"][0]["wood_rate"])-20, int(difficulty[0]["CHANCES"][0]["wood_rate"])+20) * current_gear
+    scrap_found = random.randint(int(difficulty[0]["CHANCES"][0]["scrap_rate"])-20, int(difficulty[0]["CHANCES"][0]["scrap_rate"])+20) * current_gear
+    people_found = random.randint(int(difficulty[0]["CHANCES"][0]["people_rate"])-2, int(difficulty[0]["CHANCES"][0]["people_rate"])+2) * current_gear
+    people_dead = people-random.randint(0, int(difficulty[0]["CHANCES"][0]["people_death"]))
+    food_found = random.randint(int(difficulty[0]["CHANCES"][0]["food_find"])-1, int(difficulty[0]["CHANCES"][0]["food_find"])+1) * current_gear
 
     wood += wood_found
     scrap += scrap_found
@@ -189,7 +223,59 @@ def generator():
     print("With the tools you have today, you scavenged " + str(wood_found) + " wood and " + str(scrap_found) + " scrap and you found " + str(people_found), " people")
 
 def Raid():
-    print("Today A raid has started on your base. You have ")
+    global wood, scrap, food, people, current_base, zombie_raid_level
+    zombie_raid_level += 1
+    #changes the difficulty
+
+    difficulty_multiplier = 1.0  #default is easy
+    if difficulty == HARD:
+        difficulty_multiplier = 1.2
+    elif difficulty == UNFAIR:
+        difficulty_multiplier = 1.4
+
+    print("A horde of zombies is approaching!! you need to decide if you want to sacrafice 50 percent of your reasorces to survive for sure but if you want to risk it you can fight for it and see if you don't lose anything "
+          "or lose 80 percent if you lose ")
+
+    #calculate the win probability
+    #difficulity multiplier works well and decreases the probablity slightly
+    win_probability = current_base / (current_base + zombie_raid_level * difficulty_multiplier)
+    win_probability = max(0, min(1, win_probability))
+    print(f"Your chance of defending against the raid without losses is {win_probability * 100:.2f}%.")
+
+    #asks what the player wants to do
+    decision = input("Do you want to sacrifice 50% of your materials to ensure safety? 1 for yes and 2 for no): ")
+    while True:
+        try:
+            if decision.lower() == "1":
+                #halves all reasorces
+                wood *= 0.5
+                scrap *= 0.5
+                food *= 0.5
+                people *= 0.5
+                print("You've sacrificed half of your materials to survive the raid.")
+                input("enter to continue...")
+                break
+            if decision.lower() == "2":
+                # Player takes a risk and a random check is made to see if they win or lose
+                if random.random() < win_probability:
+                    # player wins the raid
+                    print("You've successfully defended the raid without any losses!")
+                    input("enter to continue...")
+                    break
+                else:
+                    # player loses and gets 80 percent removed
+                    wood *= 0.2
+                    scrap *= 0.2
+                    food *= 0.2
+                    people *= 0.2
+                    print("The raid was devastating, you've lost 80% of your materials and people but you still survived.")
+                    input("enter to continue...")
+                    break
+
+
+        except ValueError:
+            print("Invalid input. Please try again.")
+
 
 
 
@@ -197,33 +283,43 @@ def day():
     os.system('cls')
     global day_count,food
     day_count += 1
-    if day_count == 10 or 20 or 30 or 40 or 50:
+
+    # Check if it's a raid day (every 10 days) by using modolulo function which calculates the remainder of an equasion
+    if day_count % 10 == 0:
         Raid()
-    else:
-        print("This is day ", int(day_count))
-        print("you Have " + str(people) + " people, " + str(wood) + " wood, " + str(scrap) + " scrap, and " + str(food) + " food.")
-        while True:
-            try:
-                player_input = int(input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\nYOU CAN ONLY DO ONE A DAY\n"))
-                print(player_input)
-                if player_input == 1:
-                    generator()
-                    break
+        return
 
-                elif player_input == 2:
-                    upgrade()
-                    break
-            except ValueError:
-                print("Invalid input Try again")
-        # calculates how much food per day is ate
-        food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
+    print("This is day ", int(day_count))
+    print("you Have " + str(people) + " people, " + str(wood) + " wood, " + str(scrap) + " scrap, and " + str(food) + " food.")
+    print("your current gear is level " + str(current_gear) + " and your current base level is " + str(current_base))
+    while True:
+        try:
+            player_input = int(input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\nYOU CAN ONLY DO ONE A DAY\n"))
+            print(player_input)
+            if player_input == 1:
+                generator()
+                break
 
-        food -= people * food_per_day
-        food_per_day = people * food_per_day
+            elif player_input == 2:
+                upgrade()
+                break
+            else:
+                print("Invalid")
 
-        print("Your team ate", str(food_per_day), "kilos of food today")
-        print("After a long day of work you go to rest and prepare for the next day.")
-        input("Press Enter to continue...")
+        except ValueError:
+            print("Invalid input Try again")
+    # calculates how much food per day is ate
+    food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
+
+    food -= people * food_per_day
+    food_per_day = people * food_per_day
+
+    print("Your team ate", str(food_per_day), "kilos of food today")
+    print("After a long day of work you go to rest and see if you have enough food to survive the next day.")
+    input("Press Enter to continue...")
+
+
+
 
 
 
@@ -243,7 +339,7 @@ while food >= 0 or people >= 0 or day_count <= 50:
         break
 
     if food >= 0 and people >= 0 and day_count >= 50:
-        print("You win! you survived for 100 days!")
+        print("You win! you survived for 50 days!")
         input("Press Enter to continue...")
         break
 
@@ -253,8 +349,12 @@ try:
     if player_input == 1:
         os.system('cls')
         menu()
+
     elif player_input == 2:
         os.system('cls')
         quit()
+
+    else:
+        print("Invalid")
 except ValueError:
     print("Invalid input Try again")
