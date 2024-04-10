@@ -1,6 +1,6 @@
 # Import allows code that are not in default python for example random functions are not
 import random
-import time
+import math
 import os
 
 # Variables hold different types information
@@ -121,6 +121,7 @@ def upgrade():
 def upgradegear():
     global wood, scrap, current_gear_cost, current_gear
     cost = current_gear_cost * 1.5
+    cost = round(cost)
     print("It will take", cost, "scrap and wood to upgrade to the next level.")
     if scrap < cost or wood < cost:  # Changed from 'and' to 'or' because you need to check each resource individually
         input("you don't have enough to upgrade right now\n press enter to go scavenging instead")
@@ -132,8 +133,9 @@ def upgradegear():
                 if player_input == "1":
                     scrap -= cost
                     wood -= cost
-                    current_gear = current_gear * 1.5
+                    current_gear += 0.5
                     current_gear_cost = current_gear_cost * 1.5
+                    cost = round(current_gear_cost)
                     print("Upgraded to next level\n")
                     break
 
@@ -155,6 +157,7 @@ def upgradegear():
 def upgradebase():
     global wood, scrap, current_base, current_base_cost
     cost = current_base_cost * 1.5
+    cost = round(cost)
     print("It will take", cost, "scrap and wood to upgrade to the next level.")
     if scrap < cost or wood < cost:  # Here also change 'and' to 'or'
         input("you don't have enough to upgrade right now\n press enter to go scavenging")
@@ -170,8 +173,9 @@ def upgradebase():
                 if player_input == "1":
                     scrap -= cost
                     wood -= cost
-                    current_base *= 1.5
+                    current_base += 1
                     current_base_cost *= 1.5
+                    current_base_cost = round(current_base_cost)
                     print("Upgraded to next level\n")
                     break
 
@@ -215,6 +219,11 @@ def generator():
     people += people_found
     food += food_found
 
+    wood = round(wood)
+    scrap = round(scrap)
+    people = round(people)
+    food = round(food)
+
     people = people - people_dead
     print("you scavenged for a few hours in a close city with leftover loot")
     if people_dead >= 0:
@@ -224,7 +233,7 @@ def generator():
 
 def Raid():
     global wood, scrap, food, people, current_base, zombie_raid_level
-    zombie_raid_level += 1
+    zombie_raid_level += 2
     #changes the difficulty
 
     difficulty_multiplier = 1.0  #default is easy
@@ -237,9 +246,14 @@ def Raid():
           "or lose 80 percent if you lose ")
 
     #calculate the win probability
+
     #difficulity multiplier works well and decreases the probablity slightly
+
     win_probability = current_base / (current_base + zombie_raid_level * difficulty_multiplier)
+    #this maxes the win probablity to 1 so the percentage can't be something like 300 percent
+    #max() works by selecting the smaller number in the brackets. max works the same way but picks the bigger number
     win_probability = max(0, min(1, win_probability))
+
     print(f"Your chance of defending against the raid without losses is {win_probability * 100:.2f}%.")
 
     #asks what the player wants to do
@@ -310,9 +324,12 @@ def day():
             print("Invalid input Try again")
     # calculates how much food per day is ate
     food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
-
     food -= people * food_per_day
+    food = math.ceil(food)
+
     food_per_day = people * food_per_day
+    #imported math so im able to use ceil which rounds up
+    food_per_day = math.ceil(food_per_day)
 
     print("Your team ate", str(food_per_day), "kilos of food today")
     print("After a long day of work you go to rest and see if you have enough food to survive the next day.")
@@ -358,3 +375,4 @@ try:
         print("Invalid")
 except ValueError:
     print("Invalid input Try again")
+
