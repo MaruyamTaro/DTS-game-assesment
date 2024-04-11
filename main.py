@@ -312,80 +312,81 @@ def day():
     # Check if it's a raid day (every 10 days) by using modolulo function which calculates the remainder of an equasion
     if day_count % 10 == 0:
         Raid()
-        return
 
-    print("This is day ", int(day_count))
-    print("you Have " + str(people) + " people, " + str(wood) + " wood, " + str(scrap) + " scrap, and " + str(food) + " food.")
-    print("your current gear is level " + str(current_gear) + " and your current base level is " + str(current_base))
+    else:
+        print("This is day ", int(day_count))
+        print("you Have " + str(people) + " people, " + str(wood) + " wood, " + str(scrap) + " scrap, and " + str(food) + " food.")
+        print("your current gear is level " + str(current_gear) + " and your current base level is " + str(current_base))
+        while True:
+            try:
+                player_input = int(input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\nYOU CAN ONLY DO ONE A DAY\n"))
+                print(player_input)
+                if player_input == 1:
+                    generator()
+                    break
+
+                elif player_input == 2:
+                    upgrade()
+                    break
+                else:
+                    print("Invalid")
+
+            except ValueError:
+                print("Invalid input Try again")
+        # calculates how much food per day is ate
+        food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
+        food -= people * food_per_day
+        food = math.ceil(food)
+
+        food_per_day = people * food_per_day
+        #imported math so im able to use ceil which rounds up
+        food_per_day = math.ceil(food_per_day)
+
+        print("Your team ate", str(food_per_day), "kilos of food today")
+        print("After a long day of work you go to rest and see if you have enough food to survive the next day.")
+        input("Press Enter to continue...")
+
+def start():
+    menu()
+    while food >= 0 or people >= 0 or day_count <= 50:
+        day()
+
+        if food <= 0:
+            print("Everyone starved. You lose")
+            input("Press Enter to continue...")
+            break
+
+        elif people <= 0:
+            print("you have no more people left. You lose")
+            input("Press Enter to continue...")
+            break
+
+        elif food >= 0 and people >= 0 and day_count >= 50:
+            print("You win! you survived for 50 days!")
+            input("Press Enter to continue...")
+            break
     while True:
+
         try:
-            player_input = int(input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\nYOU CAN ONLY DO ONE A DAY\n"))
-            print(player_input)
+            player_input = int(input(
+                "Do you want to try again? press 1 to play again with  different difficulty or press 2 to quit\n"))
             if player_input == 1:
-                generator()
+                os.system('cls')
+                start()
                 break
 
             elif player_input == 2:
-                upgrade()
-                break
+                os.system('cls')
+                quit()
+
             else:
                 print("Invalid")
-
         except ValueError:
             print("Invalid input Try again")
-    # calculates how much food per day is ate
-    food_per_day = difficulty[0]["CHANCES"][0]["food_rate"]
-    food -= people * food_per_day
-    food = math.ceil(food)
-
-    food_per_day = people * food_per_day
-    #imported math so im able to use ceil which rounds up
-    food_per_day = math.ceil(food_per_day)
-
-    print("Your team ate", str(food_per_day), "kilos of food today")
-    print("After a long day of work you go to rest and see if you have enough food to survive the next day.")
-    input("Press Enter to continue...")
 
 
 
 
-
-
-#Main
-menu()
-while food >= 0 or people >= 0 or day_count <= 50:
-    day()
-
-    if food <= 0:
-        print("Everyone starved. You lose")
-        input("Press Enter to continue...")
-        break
-
-    elif people <= 0:
-        print("you have no more people left. You lose")
-        input("Press Enter to continue...")
-        break
-
-    if food >= 0 and people >= 0 and day_count >= 50:
-        print("You win! you survived for 50 days!")
-        input("Press Enter to continue...")
-        break
-while True:
-
-    try:
-        player_input = int(input(
-            "Do you want to try again? press 1 to play again with  different difficulty or press 2 to quit\n"))
-        if player_input == 1:
-            os.system('cls')
-            menu()
-            break
-
-        elif player_input == 2:
-            os.system('cls')
-            quit()
-
-        else:
-            print("Invalid")
-    except ValueError:
-        print("Invalid input Try again")
+#Main code
+start()
 
