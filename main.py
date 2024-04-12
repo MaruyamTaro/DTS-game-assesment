@@ -51,7 +51,7 @@ def menu():
     # global allows the variable to be used and changed in a function
     global difficulty, EASY, HARD, UNFAIR, wood, scrap, people, food, current_gear, current_base, current_gear_cost, current_base_cost, zombie_raid_level, day_count
     difficulty = 0
-    day_count = 8
+    day_count = 0
 
 
     wood = 0
@@ -79,7 +79,8 @@ def menu():
                 "What difficulty do you  want to play! (1 for Easy) (2 for Hard) (3 for unfair)(4 to quit)(p to restart)\n")
 
             # if statements looks at the variable and if the condition is met, does that action.
-
+            #changing what difficulty is storing
+            #0 to the list
             if player_input == "1":
                 difficulty = EASY
                 break
@@ -258,11 +259,12 @@ def generator():
     round(people_dead)
     people = people - people_dead
     print("you scavenged for a few hours in a close city with leftover loot")
+    #<= and >= is equal or greater than or less than
     if people_dead >= 0:
         print("Unfortunately ", people_dead, " people died")
 
     print("With the tools you have today, you scavenged " + str(wood_found) + " wood and " + str(
-        scrap_found) + " scrap and you found " + str(people_found), " people")
+        scrap_found) + " scrap and ", food_found, " food and found " + str(people_found), " people")
 
 
 def Raid():
@@ -291,6 +293,7 @@ def Raid():
     print(f"Your chance of defending against the raid without losses is {win_probability * 100:.2f}%.")
 
     # asks what the player wants to do if it is not the last raid (don't want the player to be able to half resource to survive and win)
+    #!= means not equal. so in this line it is if daycount is not 50 run the code.
     if day_count != 50:
         while True:
             decision = input("Do you want to sacrifice 70% of your materials to ensure safety? or risk it and defend your base. you don't lose any resources if you win 1 for yes and 2 for no):p to restart whole game\n ")
@@ -377,14 +380,13 @@ def day():
             "your current gear is level " + str(current_gear) + " and your current base level is " + str(current_base))
         while True:
             try:
-                player_input = int(input(
-                    "Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\nYOU CAN ONLY DO ONE A DAY\npress p to restart game\n"))
+                player_input = input("Do you want your team to go scavenging for materials? Some might die. 1 for scavenging  2 for upgrades\nYOU CAN ONLY DO ONE A DAY\npress p to restart game\n")
                 print(player_input)
-                if player_input == 1:
+                if player_input == "1":
                     generator()
                     break
 
-                elif player_input == 2:
+                elif player_input == "2":
                     upgrade()
                     break
 
@@ -412,6 +414,7 @@ def day():
 
 
 def lost():
+
     if food <= 0:
         print("Everyone starved. You lose")
         input("Press Enter to continue...")
@@ -446,22 +449,22 @@ def playagain():
 
 def start():
     menu()
-    while food >= 0 or people >= 0:
-        if day_count == 50:
+    # continue while both food and people are above 0
+    while food > 0 and people > 0:
+        day()
+
+        if day_count >= 50:
             playagain()
-        else:
-            day()
+            break  # break the while loop to stop the game after asking for a replay
 
+        # check if game should end due to running out of resources or people
+        if food <= 0 or people <= 0:
+            lost()
+            break  #make sure it ends after the lost funtion is called
 
-
-    if food <= 0:
+    # Checks again
+    if food <= 0 or people <= 0:
         lost()
-
-
-
-    elif people <= 0:
-        lost()
-
 
 # Main code
 start()
