@@ -73,7 +73,7 @@ def menu():
         # try tests the code in it and if there is a error the except section handles the error.
         try:
             # input allows the player to make decision in the game by asking for a input
-            # i set the input to a variable player input and use a if statement to do diffrent actions
+            # I set the input to a variable player_input and use a if statement to do different actions
             player_input = input(
                 "What difficulty do you  want to play! (1 for Easy) (2 for Hard) (3 for unfair)(4 to quit)(p to restart)\n")
 
