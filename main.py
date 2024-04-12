@@ -51,15 +51,16 @@ def menu():
     # global allows the variable to be used and changed in a function
     global difficulty, EASY, HARD, UNFAIR, wood, scrap, people, food, current_gear, current_base, current_gear_cost, current_base_cost, zombie_raid_level, day_count
     difficulty = 0
-    day_count = 9
+    day_count = 8
+
 
     wood = 0
     scrap = 0
     people = 5
     food = 10
 
-    current_gear = 0
-    current_base = 3
+    current_gear = 1
+    current_base = 1
     current_gear_cost = 150
     current_base_cost = 150
 
@@ -233,19 +234,15 @@ def generator():
     # used to test the generator
     # print(int(difficulty[0]["CHANCES"][0]["wood_rate"]),int(difficulty[0]["CHANCES"][0]["scrap_rate"]),int(difficulty[0]["CHANCES"][0]["people_rate"]))
 
-    # this part finds out how much of each materials are getting found
+    # this part finds out how much of each material are getting found
     # random randint takes a random number in between 2 numbers or variables.
     # i used it here to pick how much the player was able to find by making the range between the rate - 20 and the rate + 20 and pick a number randomly.
     # finally i multiply that number with the gear buff which can be upgraded by the gear upgrade function by the player.
-    wood_found = random.randint(int(difficulty[0]["CHANCES"][0]["wood_rate"]) - 20,
-                                int(difficulty[0]["CHANCES"][0]["wood_rate"]) + 20) * current_gear
-    scrap_found = random.randint(int(difficulty[0]["CHANCES"][0]["scrap_rate"]) - 20,
-                                 int(difficulty[0]["CHANCES"][0]["scrap_rate"]) + 20) * current_gear
-    people_found = random.randint(int(difficulty[0]["CHANCES"][0]["people_rate"]) - 2,
-                                  int(difficulty[0]["CHANCES"][0]["people_rate"]) + 2) * current_gear
+    wood_found = random.randint(int(difficulty[0]["CHANCES"][0]["wood_rate"]) - 20,int(difficulty[0]["CHANCES"][0]["wood_rate"]) + 20) * current_gear
+    scrap_found = random.randint(int(difficulty[0]["CHANCES"][0]["scrap_rate"]) - 20,int(difficulty[0]["CHANCES"][0]["scrap_rate"]) + 20) * current_gear
+    people_found = random.randint(int(difficulty[0]["CHANCES"][0]["people_rate"]) - 2,int(difficulty[0]["CHANCES"][0]["people_rate"]) + 2) * current_gear
     people_dead = people - random.randint(0, int(difficulty[0]["CHANCES"][0]["people_death"]))
-    food_found = random.randint(int(difficulty[0]["CHANCES"][0]["food_find"]) - 1,
-                                int(difficulty[0]["CHANCES"][0]["food_find"]) + 1) * current_gear
+    food_found = random.randint(int(difficulty[0]["CHANCES"][0]["food_find"]) - 1,int(difficulty[0]["CHANCES"][0]["food_find"]) + 1) * current_gear
 
     # adds the found resources to the players resources
     wood += wood_found
@@ -274,16 +271,14 @@ def Raid():
     zombie_raid_level += 2
     # changes the difficulty
 
-    difficulty_multiplier = 1.0  # default is easy
+    difficulty_multiplier = 1.8  # default is easy
     if difficulty == HARD:
-        difficulty_multiplier = 1.2
+        difficulty_multiplier = 2
     elif difficulty == UNFAIR:
-        difficulty_multiplier = 1.6
+        difficulty_multiplier = 2.5
 
     print(
-        "A horde of zombies is approaching!! you need to decide if you want to sacrafice 50 percent of your reasorces to survive for sure but if you want to risk it you can fight for it and see if you don't lose anything "
-        "or lose 80 percent if you lose ")
-
+        "A horde of zombies is approaching!!")
     # calculate the win probability
 
     # difficulty multiplier works well and decreases the probability slightly
@@ -297,16 +292,21 @@ def Raid():
 
     # asks what the player wants to do if it is not the last raid (don't want the player to be able to half resource to survive and win)
     if day_count != 50:
-        decision = input("Do you want to sacrifice 50% of your materials to ensure safety? 1 for yes and 2 for no):p to restart whole game\n ")
         while True:
+            decision = input("Do you want to sacrifice 70% of your materials to ensure safety? or risk it and defend your base. you don't lose any resources if you win 1 for yes and 2 for no):p to restart whole game\n ")
             try:
                 if decision == "1":
                     # halves all resources
-                    wood *= 0.5
-                    scrap *= 0.5
-                    food *= 0.5
-                    people *= 0.5
-                    print("You've sacrificed half of your materials to survive the raid.")
+                    wood *= 0.7
+                    scrap *= 0.7
+                    food *= 0.7
+                    people *= 0.7
+                    wood = round(wood)
+                    scrap = round(scrap)
+                    people = round(people)
+                    food = round(food)
+
+                    print("You've sacrificed 70% of your materials to survive the raid.")
                     input("enter to continue...")
                     break
                 elif decision== "2":
@@ -317,11 +317,15 @@ def Raid():
                         input("enter to continue...")
                         break
                     else:
-                        # player loses and gets 80 percent removed
-                        wood *= 0.2
-                        scrap *= 0.2
-                        food *= 0.2
-                        people *= 0.2
+                        # player loses and gets 90 percent removed
+                        wood *= 0.1
+                        scrap *= 0.1
+                        food *= 0.1
+                        people *= 0.1
+                        wood = round(wood)
+                        scrap = round(scrap)
+                        people = round(people)
+                        food = round(food)
                         print(
                             "The raid was devastating, you've lost 80% of your materials and people but you still survived.")
                         input("enter to continue...")
@@ -329,25 +333,32 @@ def Raid():
                         #lower() makes the string in to a lowercase letter so if the player put in P it will still work
                 elif decision.lower() == "p":
                     start()
+                    break
 
                 else:
                     print("invalid")
+
             except ValueError:
                 print("Invalid input. Please try again.")
     else:
         #calls if it is the last day
-        print("This is your last day you need to survive to ba able to go to a safe zone and win the game")
+        print("This is your last day so you can't use half your resources to survive. you need to survive to ba able to go to a safe zone and win the game")
         input("enter to continue and see if you survived")
         # Player takes a risk and a random check is made to see if they win or lose
         if random.random() < win_probability:
             # player wins the raid
             print("You've successfully defended the raid without any losses!")
+            print("You win! you survived for 50 days! you got rescue")
             input("enter to continue...")
+
 
         else:
+            #player loses
             print("you and the team were fighting for hours but unfortunately you lost the raid")
-
+            print("you survived for so long and was one more day off of getting rescued but failed")
+            print("you lose")
             input("enter to continue...")
+
 
 def day():
     os.system('cls')
@@ -376,8 +387,11 @@ def day():
                 elif player_input == 2:
                     upgrade()
                     break
+
                 elif player_input == "p":
                     start()
+                    break
+
                 else:
                     print("Invalid")
 
@@ -397,27 +411,20 @@ def day():
         input("Press Enter to continue...")
 
 
-def start():
-    menu()
-    while food >= 0 or people >= 0 or day_count <= 50:
-        day()
+def lost():
+    if food <= 0:
+        print("Everyone starved. You lose")
+        input("Press Enter to continue...")
 
-        if food <= 0:
-            print("Everyone starved. You lose")
-            input("Press Enter to continue...")
-            break
+    elif people <= 0:
+        print("you have no more people left. You lose")
+        input("Press Enter to continue...")
 
-        elif people <= 0:
-            print("you have no more people left. You lose")
-            input("Press Enter to continue...")
-            break
+    playagain()
 
-        elif food >= 0 and people >= 0 and day_count >= 50:
-            print("You win! you survived for 50 days!")
-            input("Press Enter to continue...")
-            break
+
+def playagain():
     while True:
-
         try:
             player_input = int(input(
                 "Do you want to try again? press 1 to play again with  different difficulty or press 2 to quit\n"))
@@ -425,6 +432,7 @@ def start():
                 os.system('cls')
                 start()
                 break
+
 
             elif player_input == 2:
                 os.system('cls')
@@ -434,6 +442,25 @@ def start():
                 print("Invalid")
         except ValueError:
             print("Invalid input Try again")
+
+
+def start():
+    menu()
+    while food >= 0 or people >= 0:
+        if day_count == 50:
+            playagain()
+        else:
+            day()
+
+
+
+    if food <= 0:
+        lost()
+
+
+
+    elif people <= 0:
+        lost()
 
 
 # Main code
