@@ -107,7 +107,8 @@ def menu():
 def game():
     print(
         "You wander around with your team and finally found a place you can stay and make camp\nYou Can go scavenging for people, scrap, and wood. Per day your food will go down depending on the number of people\n"
-        "you will need to upgrade your gear for more materials scavenging and upgrade your base to defend from raids.")
+        "you will need to upgrade your gear for more materials scavenging and upgrade your base to defend from raids. Raids happen every 10 days and you have 2 choices. you can sacrafice 70 percent of your resource to safely survive but if you fight\n "
+        "you might lose 90 percent instead or lose nothing if you win. you are more likely to win if your base level is higher. you gain more materials when you scavenge if you upgrade gear. you lose if you have 0 food and 0 people ")
     input("Press Enter to continue...")
     os.system('cls')
     print("you start off with " + str(people) + " people, " + str(wood) + " wood, " + str(scrap) + " scrap, and " + str(
